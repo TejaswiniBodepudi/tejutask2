@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Form</title>
+  <style>
+    body {
+      background-color: white;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    form {
+      background-color: white;
+      padding: 20px;
+      margin: 50px auto;
+      width: 300px;
+      border-radius: 10px;
+      box-shadow: 0 0 5px gray;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      margin-top: 15px;
+      padding: 8px 12px;
+      background-color: aqua;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: deepskyblue;
+    }
+  </style>
+</head>
+<body>
+
+  <form id="loginForm">
+    <h3>Login Form</h3>
+
+    <label for="">Gmail id :</label>
+    <input type="email" id="loginEmail" placeholder="example@gmail.com">
+
+    <label for="">Password:</label>
+    <input type="password" id="loginPassword" placeholder="Enter your Password">
+
+    <button type="button" onclick="loginUser()">Login</button>
+
+    <div class="message" id="message"></div>
+    <a href="reg.html">New user? Register</a>
+  </form>
+
+  <script>
+    function loginUser() {
+      let email = document.getElementById("loginEmail").value;
+      let password = document.getElementById("loginPassword").value;
+      let message = document.getElementById("message");
+
+      if (email === "" || password === "") {
+        alert("Please enter email and password");
+        return;
+      }
+
+      let storedUser = sessionStorage.getItem("registeredUser");
+
+      if (!storedUser) {
+        message.style.color = "red";
+        message.textContent = "No registered user found. Please register first.";
+        return;
+      }
+
+      let userData = JSON.parse(storedUser);
+
+      if (email === userData.email && password === userData.password) {
+        sessionStorage.setItem("loggedInUser", userData.name);
+        window.location.href = "jiohotstar.html";
+      } else {
+        message.style.color = "red";
+        message.textContent = "Invalid email or password";
+      }
+    }
+  </script>
+</body>
+</html>
