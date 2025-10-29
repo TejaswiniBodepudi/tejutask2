@@ -1,0 +1,136 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style>
+        body {
+            background-color: white;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url("images/weather_image.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+        .weather-container {
+            background-color: #eaf6ff;
+            padding: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            text-align: center;
+            width: 300px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #333333;
+        }
+
+        input[type="search"] {
+            padding: 10px;
+            width: 200px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .weather-info {
+            margin-top: 20px;
+        }
+
+        .weather-item {
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            background-color: #ffffff;
+            margin-bottom: 10px;
+            color: #333333;
+        }
+
+        .weather-item#city {
+            font-size: 22px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="weather-container">
+        <h1>Weather APP</h1>
+        <input type="search" id="SearchLocation" placeholder="Enter the city name">
+        <button id="btn" onclick="getWeather()">Get Weather</button>
+        <div id="weather-info">
+            <div id="city" class="weather-item"></div>
+            <div id="temperature" class="weather-item"></div>
+            <div id="description" class="weather-item"></div>
+            <div id="wind" class="weather-item"></div>
+            <div id="sunrise" class="weather-item"></div>
+            <div id="sunset" class="weather-item"></div>
+        </div>
+    </div>
+
+    <script>
+        let getLOCation = document.getElementById("SearchLocation");
+        let getBtn = document.getElementById("btn");
+        let getWeatherInfo = document.getElementById("weather-info");
+        let getCity = document.getElementById("city");
+        let getTemp = document.getElementById("temperature");
+        let getDes = document.getElementById("description");
+        let getWind = document.getElementById("wind");
+        let getWsunrise = document.getElementById("sunrise");
+        let getWsunset = document.getElementById("sunset");
+
+        var apiKey = 'd13ed1c9c36ef82735989a8265a59d90';
+
+        function getWeather() {
+            if (getLOCation.value == "") {
+                alert("Please enter a location");
+            } else {
+                let loc = getLOCation.value;
+                let url = `https://api.openweathermap.org/data/2.5/weather?q=${loc}&appid=${apiKey}`;
+
+                fetch(url)
+                    .then((resp) => resp.json())
+                    .then((data) => {
+                        console.log(data);
+
+                        getCity.textContent = `City: ${data.name}`;
+                        getTemp.textContent = `Temperature: ${Math.round(data.main.temp - 273.15)}°C`;
+                        getDes.textContent = `Condition: ${data.weather[0].description}`;
+                        getWind.textContent = `Wind Speed: ${data.wind.speed} m/s`;
+                        let sunriseTime = new Date(data.sys.sunrise * 1000).toLocaleTimeString();
+                        let sunsetTime = new Date(data.sys.sunset * 1000).toLocaleTimeString();
+
+                        getWsunrise.textContent = `Sunrise: ${sunriseTime}`;
+                        getWsunset.textContent = `Sunset: ${sunsetTime}`;
+                        getWeatherInfo.innerHTML = "";
+                        getWeatherInfo.append(getCity, getTemp, getDes, getWind, getWsunrise, getWsunset);
+                    })
+                    .catch((err) => {
+                        alert("City not found. Please try again!");
+                        console.error(err);
+                    });
+            }
+        }
+    </script>
+
+</body>
+</html>
